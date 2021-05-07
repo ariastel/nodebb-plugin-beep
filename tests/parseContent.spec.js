@@ -1,14 +1,13 @@
 'use strict';
 
-var assert = require('assert');
+const assert = require('assert');
 
-var toRegExp = require('../lib/toRegExp');
-var parseContent = require('../lib/parseContent');
+const { parseContent, toRegExp } = require('../plugin/utils');
 
-var bannedWords = toRegExp(['poop', 'shit'], true);
-var bannedUrls = toRegExp(['http://example.com', 'http://foo.bar']);
-var nil = '^(?!x)x';
-var symbol = '&#8270;';
+const bannedWords = toRegExp(['poop', 'shit'], true);
+const bannedUrls = toRegExp(['http://example.com', 'http://foo.bar']);
+const nil = '^(?!x)x';
+const symbol = '&#8270;';
 
 assert.strictEqual(parseContent(
 	'A whole lot of poop causes a ton of shit, shitzu, repoopulate',

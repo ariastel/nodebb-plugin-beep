@@ -2,32 +2,31 @@
 	"id": "nodebb-plugin-beep",
 	"name": "NodeBB Censor Curse Words Plugin",
 	"description": "NodeBB Plugin that allows users to censor curse words in their posts.",
-	"url": "https://github.com/ninenine/nodebb-plugin-beep",
-	"library": "./index.js",
-	"templates":"public/templates",
+	"url": "https://github.com/ariastel/nodebb-plugin-beep",
+	"library": "./plugin/index.js",
 	"hooks": [
-		{ "hook": "static:app.load", "method": "init" },
-		{ "hook": "action:settings.set", "method": "onListChange" },
-		{ "hook": "filter:admin.header.build", "method": "admin.menu" },
+		{ "hook": "static:app.load", "method": "hooks.statics.load" },
+		{ "hook": "action:settings.set", "method": "hooks.actions.settingsSet" },
+		{ "hook": "filter:admin.header.build", "method": "hooks.filters.adminHeaderBuild" },
 
-		{ "hook": "filter:parse.post", "method": "parse", "priority": 1 },
-		{ "hook": "filter:parse.raw", "method": "parseRaw", "priority": 1 },
-		{ "hook": "filter:parse.aboutme", "method": "parseRaw" },
-		{ "hook": "filter:parse.signature", "method": "parseSignature" },
-		{ "hook": "filter:post.getFields", "method": "post.getFields"},
+		{ "hook": "filter:parse.post", "method": "hooks.filters.parse", "priority": 1 },
+		{ "hook": "filter:parse.raw", "method": "hooks.filters.parseRaw", "priority": 1 },
+		{ "hook": "filter:parse.aboutme", "method": "hooks.filters.parseRaw" },
+		{ "hook": "filter:parse.signature", "method": "hooks.filters.parseSignature" },
+		{ "hook": "filter:post.getFields", "method": "hooks.filters.postGetFields"},
 
-		{ "hook": "filter:topic.create", "method": "parseTopic" },
-		{ "hook": "filter:topic.edit", "method": "parseTopic" },
-		{ "hook": "filter:tags.filter", "method": "filterTags" },
+		{ "hook": "filter:topic.create", "method": "hooks.filters.parseTopic" },
+		{ "hook": "filter:topic.edit", "method": "hooks.filters.parseTopic" },
+		{ "hook": "filter:tags.filter", "method": "hooks.filters.filterTags" },
 
-		{ "hook": "filter:topic.create", "method": "checkForIllegalWords" },
-		{ "hook": "filter:topic.edit", "method": "checkForIllegalWords" },
-		{ "hook": "filter:topic.reply", "method": "checkForIllegalWords" },
+		{ "hook": "filter:topic.create", "method": "hooks.filters.checkForIllegalWords" },
+		{ "hook": "filter:topic.edit", "method": "hooks.filters.checkForIllegalWords" },
+		{ "hook": "filter:topic.reply", "method": "hooks.filters.checkForIllegalWords" },
 
-		{ "hook": "filter:config.get", "method": "appendConfig" },
+		{ "hook": "filter:config.get", "method": "hooks.filters.getConfig" },
 
-		{ "hook": "filter:messaging.getTeaser", "method": "messaging.getTeaser" }
+		{ "hook": "filter:messaging.getTeaser", "method": "hooks.filters.messagingGetTeaser" }
 	],
-	"languages": "languages",
-	"defaultLang": "en_GB"
+	"templates":"templates",
+	"languages": "languages"
 }

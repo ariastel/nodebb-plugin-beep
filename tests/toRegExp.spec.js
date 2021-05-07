@@ -1,8 +1,8 @@
 'use strict';
 
-var assert = require('assert');
+const assert = require('assert');
 
-var toRegExp = require('../lib/toRegExp');
+const { toRegExp } = require('../plugin/utils');
 
 assert.equal(toRegExp(['bad', 'words', 'here'], true), '/\\b(?:bad|words|here)\\b/gi');
 assert.equal(toRegExp('bad,words, here'), '/bad|words|here/gi');
