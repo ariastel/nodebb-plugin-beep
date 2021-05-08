@@ -8,21 +8,23 @@ function parseContent(content, bannedWords, bannedUrls, censorWholeWord, symbol)
   symbol = symbol || '*';
 
   function censor(match) {
-    if (!isLatin.test(match)) {
-      return '[censored]';
-    }
-
+    const symbols = new RegExp('[-[\\]{}()*+?.,\\\\^$|#\\s;_]');
+    const isP1 = symbols.exec(match[0]) != null;
+    const isP2 = symbols.exec(match[match.length - 1]) != null;
     const l = match.length;
-    let out = match[0];
+    let out = isP1 ? match[1] : match[0];
 
     let i = l - 2;
+    if (isP1 && isP2) {
+      i -= 2;
+    } else if (isP1 || isP2) {
+      i -= 1;
+    }
     while (i) {
       out += symbol;
-      // eslint-disable-next-line no-plusplus
-      i--;
+      i -= 1;
     }
-
-    return out + match[l - 1];
+    return (isP1 ? match[0] : '') + out + (isP2 ? match[l - 2] : '') + match[l - 1];
   }
 
   const replacement = censorWholeWord ? '[censored]' : censor;
@@ -39,23 +41,21 @@ function toRegExp(arr, fullWord) {
 
   let str;
   if (fullWord) {
-    const latin = arr
-      .filter((word) => isLatin.test(word))
-      .map((word) => word.trim().replace(/([-[\]{}()*+?.,\\^$|#\s])/g, '\\$1'))
-      .join('|');
+    const latin = arr.filter((word) => isLatin.test(word)).map((word) => `\\b${word.trim().replace(/([-[\]{}()*+?.,\\^$|#\s])/g, '\\$1')}\\b`).join('|');
 
-    const notLatin = arr
-      .filter((word) => !isLatin.test(word))
-      .map((word) => word.trim().replace(/([-[\]{}()*+?.,\\^$|#\s])/g, '\\$1'))
-      .join('|');
+    const notLatin = arr.filter((word) => !isLatin.test(word)).map((word) => {
+      word = word.trim().replace(/([-[\]{}()*+?.,\\^$|#\s])/g, '\\$1');
+      return `^${word}[-[\\]{}()*+?.,\\\\^$|#;\\s]|[-[\\]{}()*+?.,\\\\^$|#;\\s]${word}+$|^${word}+$|[-[\\]{}()*+?.,\\\\^$|#;\\s]${word}[-[\\]{}()*+?.,\\\\^$|#;\\s]`;
+    }).join('|');
 
     if (latin && notLatin) {
-      str = `\\b(?:${latin})\\b|(?:${notLatin})`;
+      str = `${latin}|${notLatin}`;
     } else if (latin) {
-      str = `\\b(?:${latin})\\b`;
+      str = latin;
     } else if (notLatin) {
       str = notLatin;
     }
+
   } else {
     str = arr.filter(Boolean).map((word) => word.trim().replace(/([-[\]{}()*+?.,\\^$|#\s])/g, '\\$1')).join('|');
   }
