@@ -20,7 +20,7 @@ function parseContent(content, bannedWords, bannedUrls, censorWholeWord, symbol)
     } else if (isP1 || isP2) {
       i -= 1;
     }
-    while (i) {
+    while (i>0) {
       out += symbol;
       i -= 1;
     }
