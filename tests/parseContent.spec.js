@@ -35,7 +35,7 @@ assert.strictEqual(parseContent(
   nil,
   bannedUrls,
   false
-), 'My favorite website is [link removed]. I also love [link removed].');
+), 'My favorite website is [недопустимая ссылка]. I also love [недопустимая ссылка].');
 
 var unicodeBannedWords = toRegExp(['вет', 'тото'], true);
 assert.strictEqual(parseContent(

@@ -20,7 +20,7 @@ function parseContent(content, bannedWords, bannedUrls, censorWholeWord, symbol)
     } else if (isP1 || isP2) {
       i -= 1;
     }
-    while (i>0) {
+    while (i > 0) {
       out += symbol;
       i -= 1;
     }
@@ -30,7 +30,7 @@ function parseContent(content, bannedWords, bannedUrls, censorWholeWord, symbol)
   const replacement = censorWholeWord ? '[censored]' : censor;
   return content
     .replace(bannedWords, replacement)
-    .replace(bannedUrls, '[link removed]');
+    .replace(bannedUrls, '[недопустимая ссылка]');
 }
 
 function toRegExp(arr, fullWord) {
